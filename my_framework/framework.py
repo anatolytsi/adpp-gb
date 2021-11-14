@@ -35,7 +35,7 @@ class Framework:
         :param start_response: a callable accepting a status code,
             a list of headers, and an optional exception context to
             start the response
-        :return:
+        :return: response body
         """
         code, body = self._get_view(environ['PATH_INFO'])
         start_response(code, [('Content-Type', 'text/html')])
@@ -66,6 +66,5 @@ class Framework:
         """
         Not found view setter
         :param not_found_cls: a callable function
-        :return:
         """
         self._not_found_view = not_found_cls
