@@ -6,6 +6,11 @@ class DefaultIndex:
         return '200 Success', 'Welcome to my custom framework!'
 
 
+class PageNotFound404:
+    def __call__(self, *args, **kwargs):
+        return '404 Page Not Found', ''  # TODO: a page not found template
+
+
 class Framework:
     """My custom framework class"""
 
@@ -16,6 +21,7 @@ class Framework:
         :param routes: server routes
         """
         self.routes = routes if routes else {'/': DefaultIndex()}
+        self._not_found_view = PageNotFound404
 
     def __call__(self, environ, start_response):
         """
@@ -41,5 +47,13 @@ class Framework:
         if path in self.routes:
             view = self.routes[path]
         else:
-            view = lambda: ('404 Not Found', 'Page not found!')
+            view = self.not_found_view
         return view()
+
+    @property
+    def not_found_view(self):
+        return self._not_found_view()
+
+    @not_found_view.setter
+    def not_found_view(self, not_found_cls: Callable):
+        self._not_found_view = not_found_cls
