@@ -2,11 +2,15 @@ from typing import Callable
 
 
 class DefaultIndex:
+    """Default index view"""
+
     def __call__(self, *args, **kwargs):
         return '200 Success', 'Welcome to my custom framework!'
 
 
 class PageNotFound404:
+    """Default 404 view"""
+
     def __call__(self, *args, **kwargs):
         return '404 Page Not Found', ''  # TODO: a page not found template
 
@@ -25,7 +29,7 @@ class Framework:
 
     def __call__(self, environ, start_response):
         """
-
+        Framework callable
         :param environ: a WSGI environment
         :param start_response: a callable accepting a status code,
             a list of headers, and an optional exception context to
@@ -52,8 +56,14 @@ class Framework:
 
     @property
     def not_found_view(self):
+        """Not found view getter"""
         return self._not_found_view()
 
     @not_found_view.setter
     def not_found_view(self, not_found_cls: Callable):
+        """
+        Not found view setter
+        :param not_found_cls: a callable function
+        :return:
+        """
         self._not_found_view = not_found_cls
