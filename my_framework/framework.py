@@ -2,19 +2,7 @@ import inspect
 from typing import Callable
 from wsgiref.simple_server import make_server
 
-
-class DefaultIndex:
-    """Default index view"""
-
-    def __call__(self, *args, **kwargs):
-        return '200 Success', 'Welcome to my custom framework!'
-
-
-class PageNotFound404:
-    """Default 404 view"""
-
-    def __call__(self, *args, **kwargs):
-        return '404 Page Not Found', ''  # TODO: a page not found template
+from my_framework.templating import DefaultIndex, PageNotFound404
 
 
 class Framework:

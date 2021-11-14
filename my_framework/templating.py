@@ -15,3 +15,17 @@ def render(template_name, folder='templates', **kwargs):
     with open(file_path, encoding='utf-8') as f:
         template = Template(f.read())
     return template.render(**kwargs)
+
+
+class DefaultIndex:
+    """Default index view"""
+
+    def __call__(self, *args, **kwargs):
+        return '200 Success', 'Welcome to my custom framework!'
+
+
+class PageNotFound404:
+    """Default 404 view"""
+
+    def __call__(self, *args, **kwargs):
+        return '404 Page Not Found', render('404.html', 'default_templates')
