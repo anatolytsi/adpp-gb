@@ -2,6 +2,7 @@ import inspect
 from typing import Callable
 from wsgiref.simple_server import make_server
 
+from wunderbar.requests import Request
 from wunderbar.templating import DefaultIndex, PageNotFound404
 
 
@@ -26,6 +27,9 @@ class WunderbarApp:
             start the response
         :return: response body
         """
+        request = Request(environ['REQUEST_METHOD']).get_request(environ)
+        print(f'Got {request["method"]} request with data '
+              f'{request["data"] if "data" in request else request["request_params"]}')
         code, body = self._get_view(environ['PATH_INFO'])
         start_response(code, [('Content-Type', 'text/html')])
         return [body.encode('utf-8')]
