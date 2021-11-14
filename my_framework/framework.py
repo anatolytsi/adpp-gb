@@ -37,7 +37,7 @@ class Framework:
             start the response
         :return:
         """
-        code, body = self._get_view(environ['PATH'])
+        code, body = self._get_view(environ['PATH_INFO'])
         start_response(code, [('Content-Type', 'text/html')])
         return [body.encode('utf-8')]
 
