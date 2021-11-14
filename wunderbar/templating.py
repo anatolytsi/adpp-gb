@@ -28,4 +28,4 @@ class PageNotFound404:
     """Default 404 view"""
 
     def __call__(self, *args, **kwargs):
-        return '404 Page Not Found', render('404.html', 'default_templates')
+        return '404 Page Not Found', render('404.html', 'wunderbar/default_templates')
