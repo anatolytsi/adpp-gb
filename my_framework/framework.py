@@ -1,3 +1,4 @@
+import inspect
 from typing import Callable
 
 
@@ -57,7 +58,8 @@ class Framework:
     @property
     def not_found_view(self):
         """Not found view getter"""
-        return self._not_found_view()
+        # Return a callable class instance or a function object
+        return self._not_found_view() if inspect.isclass(self._not_found_view) else self._not_found_view
 
     @not_found_view.setter
     def not_found_view(self, not_found_cls: Callable):
