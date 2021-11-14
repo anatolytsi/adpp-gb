@@ -2,10 +2,10 @@ import inspect
 from typing import Callable
 from wsgiref.simple_server import make_server
 
-from my_framework.templating import DefaultIndex, PageNotFound404
+from wunderbar.templating import DefaultIndex, PageNotFound404
 
 
-class Framework:
+class WunderbarApp:
     """My custom framework class"""
 
     def __init__(self, routes: dict = None):
@@ -70,7 +70,7 @@ class Framework:
 
 
 def main():
-    app = Framework()
+    app = WunderbarApp()
     app.run()
 
 
