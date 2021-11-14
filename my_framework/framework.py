@@ -1,5 +1,6 @@
 import inspect
 from typing import Callable
+from wsgiref.simple_server import make_server
 
 
 class DefaultIndex:
@@ -68,3 +69,22 @@ class Framework:
         :param not_found_cls: a callable function
         """
         self._not_found_view = not_found_cls
+
+    def run(self, host: str = '', port: int = 8080):
+        """
+        Runs server on defined host and port
+        :param host: server host
+        :param port: server port
+        """
+        with make_server(host, port, self) as httpd:
+            print(f'Starting a server on {httpd.server_name}:{httpd.server_port}')
+            httpd.serve_forever()
+
+
+def main():
+    app = Framework()
+    app.run()
+
+
+if __name__ == '__main__':
+    main()
