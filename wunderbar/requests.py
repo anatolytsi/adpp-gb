@@ -118,7 +118,7 @@ class PostRequest(RequestBase):
 
 
 class Request:
-    """Generic request method"""
+    """Generic request class"""
 
     def __new__(cls, method: str):
         """
