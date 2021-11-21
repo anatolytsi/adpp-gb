@@ -42,7 +42,7 @@ class CreateCategory:
             new_category = site.create_category(name, category)
             site.categories.add(new_category)
 
-            return '200 OK', render('index.html', objects_list=site.categories)
+            return '200 OK', render('categories.html', objects_list=site.categories)
         else:
             categories = site.categories
             return '200 OK', render('create-category.html', categories=categories)
