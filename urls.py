@@ -1,6 +1,8 @@
-from views import Index, Contact
+from views import Index, Contact, Categories, CreateCategory
 
 routes = {
     '/': Index(),
-    '/contact/': Contact()
+    '/contact/': Contact(),
+    '/categories/': Categories(),
+    '/create-category/': CreateCategory()
 }
