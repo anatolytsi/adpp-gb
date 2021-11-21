@@ -1,4 +1,5 @@
 import copy
+from datetime import datetime
 import quopri
 
 
@@ -138,5 +139,14 @@ class Logger(metaclass=SingletonByName):
         self.name = name
 
     @staticmethod
+    def _print(text: str):
+        dt_str = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+        print(f'{dt_str} {text}')
+
+    @staticmethod
     def log(text):
-        print('log--->', text)
+        Logger._print(f'LOG: {text}')
+
+    @staticmethod
+    def error(text):
+        Logger._print(f'ERROR: {text}')
