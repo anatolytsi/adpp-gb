@@ -22,7 +22,8 @@ Categories
                 <div id="cat_row">
                     <p id="cat_name">{{item.name}}</p>
                     <p id="cat_courses">Number of courses: {{item.course_count()}}</p>
-                    <button class="btn">Enroll now!</button>
+                    <a style="text-decoration: none" href="/courses/?id={{item.id}}">View courses</a>
+                    <p><button class="btn">Enroll now!</button></p>
                 </div>
             {% endfor %}
         </div>

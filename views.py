@@ -47,3 +47,15 @@ class CreateCategory:
             categories = site.categories
             return '200 OK', render('create-category.html', categories=categories)
 
+
+class Courses:
+    """Courses view"""
+
+    def __call__(self, request):
+        try:
+            category = site.find_category_by_id(int(request['request_params']['id']))
+            return '200 OK', render('courses.html', objects_list=category.courses, name=category.name,
+                                    id=category.id)
+        except KeyError:
+            return '200 OK', 'No courses have been added yet'
+
