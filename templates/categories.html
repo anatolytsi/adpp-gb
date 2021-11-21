@@ -20,10 +20,13 @@ Categories
         <div id="cat_list">
             {% for item in objects_list %}
                 <div id="cat_row">
-                    <p id="cat_name">{{item.name}}</p>
+                    <p id="cat_name">Category {{item.name}}</p>
                     <p id="cat_courses">Number of courses: {{item.course_count()}}</p>
-                    <a style="text-decoration: none" href="/courses/?id={{item.id}}">View courses</a>
-                    <p><button class="btn">Enroll now!</button></p>
+                    <button class="btn">
+                        <a style="text-decoration: none" href="/category-courses/?id={{item.id}}">
+                            View "{{item.name}}" courses
+                        </a>
+                    </button>
                 </div>
             {% endfor %}
         </div>
