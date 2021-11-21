@@ -15,22 +15,20 @@ Courses
 {% block body %}
     <div id="container1">
         <div id="row1">
-            Interested in "{{name}}"? Then find a course you would like to study!
+            Find a course of interest from our vast number of offers!
         </div>
         <div id="course_list">
             {% for item in objects_list %}
-            <li>
-                {{item.name}} <span><a style="text-decoration: none" href="/copy-course?name={{item.name}}">copy</a></span>
-            </li>
-            {% endfor %}
-            {% for item in objects_list %}
                 <div id="course_row">
-                    <p id="course_name">{{item.name}}</p>
-                    <p id="course_courses">Number of courses: {{item.course_count()}}</p>
+                    <p id="course_name">
+                        Course {{item.name}}
+                        <span>
+                            <a style="text-decoration: none" href="/copy-course/?name={{item.name}}">copy</a>
+                        </span>
+                    </p>
                     <button class="btn">Enroll now!</button>
                 </div>
             {% endfor %}
         </div>
-		<button class="btn"><a style="text-decoration: none" href="/create-course/?id={{id}}">Create a course</a></button>
     </div>
 {% endblock %}
