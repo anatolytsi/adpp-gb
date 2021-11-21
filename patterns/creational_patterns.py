@@ -1,3 +1,5 @@
+import os
+import sys
 import copy
 from datetime import datetime
 import quopri
@@ -134,19 +136,30 @@ class SingletonByName(type):
 
 
 class Logger(metaclass=SingletonByName):
+    _default_log_path = f'{os.path.dirname(sys.argv[0])}/logs'
 
     def __init__(self, name):
         self.name = name
+        if not os.path.exists(self._default_log_path):
+            os.mkdir(self._default_log_path)
+        self.filepath = f'{self._default_log_path}/{self.name}.txt'
 
     @staticmethod
-    def _print(text: str):
+    def _append_dt_to_txt(text: str):
         dt_str = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
-        print(f'{dt_str} {text}')
+        return f'{dt_str}: {text}'
 
     @staticmethod
-    def log(text):
-        Logger._print(f'LOG: {text}')
+    def _save_file(filepath: str, text: str):
+        with open(filepath, 'a+') as f:
+            f.write(f'{text}\n')
 
-    @staticmethod
-    def error(text):
-        Logger._print(f'ERROR: {text}')
+    def log(self, text):
+        log_text = self._append_dt_to_txt(f'LOG: {text}')
+        print(log_text)
+        self._save_file(self.filepath, log_text)
+
+    def error(self, text):
+        error_text = self._append_dt_to_txt(f'ERROR: {text}')
+        print(error_text)
+        self._save_file(self.filepath, error_text)
