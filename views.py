@@ -1,5 +1,5 @@
 from patterns.creational_patterns import Engine, Logger
-from patterns.structural_patterns import route
+from patterns.structural_patterns import route, method_debug
 from wunderbar.templating import render
 
 site = Engine()
@@ -11,6 +11,7 @@ routes = {}
 class Index:
     """Index view"""
 
+    @method_debug
     def __call__(self, request):
         logger.log('Index render was called')
         return '200 OK', render('index.html')
@@ -20,6 +21,7 @@ class Index:
 class Contact:
     """Contact view"""
 
+    @method_debug
     def __call__(self, request):
         logger.log('Contact render was called')
         return '200 OK', render('contact.html')
@@ -29,6 +31,7 @@ class Contact:
 class Categories:
     """Categories view"""
 
+    @method_debug
     def __call__(self, request):
         logger.log(f'Categories render was called with categories: {", ".join([cat.name for cat in site.categories])}')
         return '200 OK', render('categories.html', objects_list=site.categories)
@@ -38,6 +41,7 @@ class Categories:
 class CreateCategory:
     """Category creation view"""
 
+    @method_debug
     def __call__(self, request):
         if request['method'] == 'POST':
             data = request['data']
@@ -64,6 +68,7 @@ class CreateCategory:
 class Courses:
     """Courses view"""
 
+    @method_debug
     def __call__(self, request):
         logger.log('Courses render was called')
         return '200 OK', render('courses.html', objects_list=site.courses)
@@ -73,6 +78,7 @@ class Courses:
 class CategoryCourses:
     """Category courses view"""
 
+    @method_debug
     def __call__(self, request):
         try:
             category = site.find_category_by_id(int(request['request_params']['id']))
@@ -90,6 +96,7 @@ class CreateCourse:
     """Create course view"""
     category_id = None
 
+    @method_debug
     def __call__(self, request):
         if request['method'] == 'POST':
             data = request['data']
@@ -124,6 +131,7 @@ class CreateCourse:
 class CopyCourse:
     """Copy Course view"""
 
+    @method_debug
     def __call__(self, request):
         request_params = request['request_params']
 
