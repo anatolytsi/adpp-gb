@@ -1,10 +1,13 @@
 from patterns.creational_patterns import Engine, Logger
+from patterns.structural_patterns import route
 from wunderbar.templating import render
 
 site = Engine()
 logger = Logger('main')
+routes = {}
 
 
+@route(routes, '/')
 class Index:
     """Index view"""
 
@@ -13,6 +16,7 @@ class Index:
         return '200 OK', render('index.html')
 
 
+@route(routes, '/contact/')
 class Contact:
     """Contact view"""
 
@@ -21,6 +25,7 @@ class Contact:
         return '200 OK', render('contact.html')
 
 
+@route(routes, '/categories/')
 class Categories:
     """Categories view"""
 
@@ -29,6 +34,7 @@ class Categories:
         return '200 OK', render('categories.html', objects_list=site.categories)
 
 
+@route(routes, '/create-category/')
 class CreateCategory:
     """Category creation view"""
 
@@ -54,6 +60,7 @@ class CreateCategory:
             return '200 OK', render('create-category.html', categories=categories)
 
 
+@route(routes, '/courses/')
 class Courses:
     """Courses view"""
 
@@ -62,6 +69,7 @@ class Courses:
         return '200 OK', render('courses.html', objects_list=site.courses)
 
 
+@route(routes, '/category-courses/')
 class CategoryCourses:
     """Category courses view"""
 
@@ -77,6 +85,7 @@ class CategoryCourses:
             return '400 Bad Request', 'No courses have been added yet'
 
 
+@route(routes, '/create-course/')
 class CreateCourse:
     """Create course view"""
     category_id = None
@@ -111,6 +120,7 @@ class CreateCourse:
                 return '400 Bad Request', 'Either no category ID was provided or the category does not exist'
 
 
+@route(routes, '/copy-course/')
 class CopyCourse:
     """Copy Course view"""
 
