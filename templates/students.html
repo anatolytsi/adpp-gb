@@ -17,17 +17,11 @@ Students
         <div id="row1">
             Find students
         </div>
-		<li>
-			<a href="/create-student/">Create student</a>
-		</li>
-		<li>
-			<a href="/add-student/">Add student to a course</a>
-		</li>
         <div id="cat_list">
             {% for item in objects_list %}
                 <div id="cat_row">
                     <li>
-                        {{item.name}}
+                        {{item.name}}, courses:
                         {% for course in item.courses %}
                             {{course.name}}
                         {% endfor %}
@@ -35,6 +29,7 @@ Students
                 </div>
             {% endfor %}
         </div>
-		<button class="btn"><a style="text-decoration: none" href="/create-category/">Create a category</a></button>
+		<button class="btn"><a style="text-decoration: none" href="/create-student/">Create a student</a></button>
+		<button class="btn"><a style="text-decoration: none" href="/add-student/">Add a student to a course</a></button>
     </div>
 {% endblock %}
