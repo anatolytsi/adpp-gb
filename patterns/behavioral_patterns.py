@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+import jsonpickle
+
 from wunderbar.templating import render
 
 
@@ -152,3 +154,33 @@ class CreateView(TemplateView, ABC):
             return self.render_template_with_context()
         else:
             return super().__call__(request)
+
+
+class Writer(ABC):
+    def __init__(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def write(self, text):
+        pass
+
+
+class ConsoleWriter(Writer):
+    """Basic console writer"""
+
+    def write(self, text):
+        """Writes text to console"""
+        print(text)
+
+
+class FileWriter(Writer):
+    """Basic file writer"""
+
+    def __init__(self, file_name, **kwargs):
+        super().__init__(**kwargs)
+        self.file_name = file_name
+
+    def write(self, text):
+        """Writes text to end of file"""
+        with open(self.file_name, 'a', encoding='utf-8') as f:
+            f.write(f'{text}\n')

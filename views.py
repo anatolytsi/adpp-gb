@@ -1,80 +1,56 @@
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import route, method_debug
-from patterns.behavioral_patterns import SmsSender, EmailSender, ListView, CreateView
+from patterns.behavioral_patterns import SmsSender, EmailSender, ListView, CreateView, TemplateView, ConsoleWriter, \
+    FileWriter
 from wunderbar.templating import render
 
 site = Engine()
-logger = Logger('main')
+logger = Logger('main', [ConsoleWriter, FileWriter])
 sms_sender = SmsSender()
 email_sender = EmailSender()
 routes = {}
 
 
 @route(routes, '/')
-class Index:
+class Index(TemplateView):
     """Index view"""
-
-    @method_debug
-    def __call__(self, request):
-        logger.log('Index render was called')
-        return '200 OK', render('index.html')
+    template_name = 'index.html'
 
 
 @route(routes, '/contact/')
-class Contact:
+class Contact(TemplateView):
     """Contact view"""
-
-    @method_debug
-    def __call__(self, request):
-        logger.log('Contact render was called')
-        return '200 OK', render('contact.html')
+    template_name = 'contact.html'
 
 
 @route(routes, '/categories/')
-class Categories:
+class Categories(ListView):
     """Categories view"""
-
-    @method_debug
-    def __call__(self, request):
-        logger.log(f'Categories render was called with categories: {", ".join([cat.name for cat in site.categories])}')
-        return '200 OK', render('categories.html', objects_list=site.categories)
+    queryset = site.categories
+    template_name = 'categories.html'
 
 
 @route(routes, '/create-category/')
-class CreateCategory:
+class CreateCategory(CreateView):
     """Category creation view"""
+    template_name = 'create-category.html'
 
-    @method_debug
-    def __call__(self, request):
-        if request['method'] == 'POST':
-            data = request['data']
+    def create_obj(self, data: dict):
+        name = site.decode_value(data['name'])
+        category = None
+        if category_id := data.get('category_id'):
+            category = site.find_category_by_id(int(category_id))
 
-            name = data['name']
-            name = site.decode_value(name)
-
-            category = None
-            if category_id := data.get('category_id'):
-                category = site.find_category_by_id(int(category_id))
-
-            new_category = site.create_category(name, category)
-            site.categories.add(new_category)
-
-            logger.log(f'Category "{name}" was created')
-            return '200 OK', render('categories.html', objects_list=site.categories)
-        else:
-            categories = site.categories
-            logger.log(f'Category creation was rendered with: {", ".join([cat.name for cat in categories])}')
-            return '200 OK', render('create-category.html', categories=categories)
+        new_category = site.create_category(name, category)
+        site.categories.add(new_category)
+        logger.log(f'Category "{name}" was created')
 
 
 @route(routes, '/courses/')
-class Courses:
+class Courses(ListView):
     """Courses view"""
-
-    @method_debug
-    def __call__(self, request):
-        logger.log('Courses render was called')
-        return '200 OK', render('courses.html', objects_list=site.courses)
+    queryset = site.courses
+    template_name = 'courses.html'
 
 
 @route(routes, '/category-courses/')

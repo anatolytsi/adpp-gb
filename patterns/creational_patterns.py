@@ -3,8 +3,9 @@ import sys
 import copy
 from datetime import datetime
 import quopri
+from typing import Union, List, Type
 
-from patterns.behavioral_patterns import CourseNotifier
+from patterns.behavioral_patterns import CourseNotifier, ConsoleWriter, Writer
 
 
 class User:
@@ -162,33 +163,36 @@ class SingletonByName(type):
 class Logger(metaclass=SingletonByName):
     _default_log_path = f'{os.path.dirname(sys.argv[0])}/logs'
 
-    def __init__(self, name):
+    def __init__(self, name, writers: Union[List[Type[Writer]], Type[Writer]] = ConsoleWriter):
+        self.writers = []
         self.name = name
         if not os.path.exists(self._default_log_path):
             os.mkdir(self._default_log_path)
         self.filepath = f'{self._default_log_path}/{self.name}.txt'
+        if isinstance(writers, list):
+            for writer in writers:
+                self.writers.append(writer(file_name=self.filepath))
+        else:
+            self.writers.append(writers(file_name=self.filepath))
 
     @staticmethod
     def _append_dt_to_txt(text: str):
         dt_str = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
         return f'{dt_str}: {text}'
 
-    @staticmethod
-    def _save_file(filepath: str, text: str):
-        with open(filepath, 'a+') as f:
-            f.write(f'{text}\n')
+    def _write(self, text):
+        for writer in self.writers:
+            writer.write(text)
 
     def debug(self, text):
         debug_text = self._append_dt_to_txt(f'DEBUG: {text}')
+        self._write(debug_text)
         print(debug_text)
-        self._save_file(self.filepath, debug_text)
 
     def log(self, text):
         log_text = self._append_dt_to_txt(f'LOG: {text}')
-        print(log_text)
-        self._save_file(self.filepath, log_text)
+        self._write(log_text)
 
     def error(self, text):
         error_text = self._append_dt_to_txt(f'ERROR: {text}')
-        print(error_text)
-        self._save_file(self.filepath, error_text)
+        self._write(error_text)
