@@ -6,7 +6,8 @@ import quopri
 
 
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class Teacher(User):
@@ -14,7 +15,10 @@ class Teacher(User):
 
 
 class Student(User):
-    pass
+
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 class UserFactory:
@@ -24,10 +28,10 @@ class UserFactory:
     }
 
     @classmethod
-    def create(cls, type_):
+    def create(cls, type_, name):
         if type_ not in cls._types:
             raise AttributeError(f'Wrong User type. Can be one of: {", ".join(cls._types)}')
-        return cls._types[type_]()
+        return cls._types[type_](name)
 
 
 class CoursePrototype:
@@ -90,8 +94,8 @@ class Engine:
         self.categories = set()
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -107,6 +111,10 @@ class Engine:
 
     def get_course(self, name):
         items = [course for course in self.courses if course.name == name]
+        return items[0] if items else None
+
+    def get_student(self, name) -> Student:
+        items = [student for student in self.students if student.name == name]
         return items[0] if items else None
 
     @staticmethod
