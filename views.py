@@ -1,9 +1,12 @@
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import route, method_debug
+from patterns.behavioral_patterns import SmsSender, EmailSender
 from wunderbar.templating import render
 
 site = Engine()
 logger = Logger('main')
+sms_sender = SmsSender()
+email_sender = EmailSender()
 routes = {}
 
 
@@ -108,6 +111,8 @@ class CreateCourse:
                 category = site.find_category_by_id(self.category_id)
 
                 new_course = site.create_course('record', name, category)
+                new_course.observers.append(email_sender)
+                new_course.observers.append(sms_sender)
                 site.courses.add(new_course)
 
                 logger.log(f'Course "{name}" was created')

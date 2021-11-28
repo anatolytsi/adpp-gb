@@ -4,6 +4,8 @@ import copy
 from datetime import datetime
 import quopri
 
+from patterns.behavioral_patterns import CourseNotifier
+
 
 class User:
     def __init__(self, name):
@@ -40,12 +42,26 @@ class CoursePrototype:
         return copy.deepcopy(self)
 
 
-class Course(CoursePrototype):
+class Course(CoursePrototype, CourseNotifier):
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.courses.append(self)
+        self.students = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        """
+        Adds student to a course
+        :param student: student to add
+        """
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
 
 
 class InteractiveCourse(Course):
