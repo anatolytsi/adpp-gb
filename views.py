@@ -1,5 +1,5 @@
 from patterns.creational_patterns import Engine, Logger
-from patterns.structural_patterns import route, method_debug
+from patterns.structural_patterns import route, method_debug, BaseSerializer
 from patterns.behavioral_patterns import SmsSender, EmailSender, ListView, CreateView, TemplateView, ConsoleWriter, \
     FileWriter
 from wunderbar.templating import render
@@ -166,3 +166,12 @@ class AddStudentToCourse(CreateView):
         student_name = site.decode_value(data['student_name'])
         student = site.get_student(student_name)
         course.add_student(student)
+
+
+@route(routes=routes, url='/api/courses/')
+class CourseApi:
+    """Course API resource"""
+
+    @method_debug
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.courses).dump()
