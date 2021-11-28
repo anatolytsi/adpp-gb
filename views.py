@@ -1,6 +1,6 @@
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import route, method_debug
-from patterns.behavioral_patterns import SmsSender, EmailSender
+from patterns.behavioral_patterns import SmsSender, EmailSender, ListView, CreateView
 from wunderbar.templating import render
 
 site = Engine()
@@ -159,15 +159,34 @@ class CopyCourse:
 
 
 @route(routes, url='/students/')
-class Students:
-    pass
+class Students(ListView):
+    queryset = site.students
+    template_name = 'students.html'
 
 
 @route(routes, url='/create-student/')
-class StudentCreate:
-    pass
+class StudentCreate(CreateView):
+    template_name = 'create-student.html'
+
+    def create_obj(self, data: dict):
+        name = site.decode_value(data['name'])
+        new_student = site.create_user('student', name)
+        site.students.add(new_student)
 
 
 @route(routes, url='/add-student/')
-class AddStudentToCourse:
-    pass
+class AddStudentToCourse(CreateView):
+    template_name = 'add-student.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['courses'] = site.courses
+        context['students'] = site.students
+        return context
+
+    def create_obj(self, data: dict):
+        course_name = site.decode_value(data['course_name'])
+        course = site.get_course(course_name)
+        student_name = site.decode_value(data['student_name'])
+        student = site.get_student(student_name)
+        course.add_student(student)
