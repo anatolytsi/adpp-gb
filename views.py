@@ -156,3 +156,18 @@ class CopyCourse:
         except KeyError:
             logger.error('No courses have been added yet')
             return '400 Bad Request', 'No courses have been added yet'
+
+
+@route(routes, url='/students/')
+class Students:
+    pass
+
+
+@route(routes, url='/create-student/')
+class StudentCreate:
+    pass
+
+
+@route(routes, url='/add-student/')
+class AddStudentToCourse:
+    pass

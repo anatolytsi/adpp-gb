@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+Students
+{% endblock %}
+
+{% block header %}
+Students
+{% endblock %}
+
+{% block menu %}
+    {% include "inc-menu.html" %}
+{% endblock %}
+
+{% block body %}
+    <div id="container1">
+        <div id="row1">
+            Find students
+        </div>
+		<li>
+			<a href="/create-student/">Create student</a>
+		</li>
+		<li>
+			<a href="/add-student/">Add student to a course</a>
+		</li>
+        <div id="cat_list">
+            {% for item in objects_list %}
+                <div id="cat_row">
+                    <li>
+                        {{item.name}}
+                        {% for course in item.courses %}
+                            {{course.name}}
+                        {% endfor %}
+                    </li>
+                </div>
+            {% endfor %}
+        </div>
+		<button class="btn"><a style="text-decoration: none" href="/create-category/">Create a category</a></button>
+    </div>
+{% endblock %}
