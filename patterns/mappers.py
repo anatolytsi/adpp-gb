@@ -92,7 +92,7 @@ connection = sqlite3.connect('patterns.sqlite')
 
 class MapperRegistry:
     _mappers = {
-        Student.__class__.__name__.lower(): StudentMapper
+        Student.__name__.lower(): StudentMapper
     }
 
     @classmethod
