@@ -66,6 +66,7 @@ class UnitOfWork:
         """Gets current unit of work"""
         return cls._current.unit_of_work
 
-    def new_current(self):
+    @classmethod
+    def new_current(cls):
         """Sets new current unit of work"""
-        self.__class__.set_current(UnitOfWork())
+        cls.set_current(UnitOfWork())
