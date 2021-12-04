@@ -1,7 +1,5 @@
 import threading
 
-from patterns.mappers import MapperRegistry
-
 
 class UnitOfWork:
     """Unit of Work for database"""
@@ -13,8 +11,10 @@ class UnitOfWork:
         self.removed_objects = set()
         self.MapperRegistry = None
 
-    def set_mapper_registry(self, mapper_registry: MapperRegistry):
+    def set_mapper_registry(self, mapper_registry):
         """Sets registry mapper for unit of work"""
+        from patterns.mappers import MapperRegistry
+        mapper_registry: MapperRegistry
         self.MapperRegistry = mapper_registry
 
     def register_new(self, obj):
